@@ -9,7 +9,8 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  base: "/landing/",
+  // Netlify: VITE_BASE_PATH=/  |  Express: default /landing/
+  base: process.env.VITE_BASE_PATH || "/landing/",
   server: {
     port: 5173,
     proxy: {

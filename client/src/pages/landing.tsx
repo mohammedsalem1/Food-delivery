@@ -12,6 +12,7 @@ import { WebGLShader } from "@/components/ui/web-gl-shader";
 import { LiquidButton } from "@/components/ui/liquid-glass-button";
 import { SiteHeader } from "@/components/site-header";
 import { fetchPlatformStats } from "@/lib/api";
+import { appPath } from "@/lib/base-path";
 
 const FOOD_IMAGES = [
   "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=400&q=80",
@@ -87,7 +88,7 @@ export default function LandingPage() {
                 className="rounded-full border border-orange-400/40 text-white"
                 size="xl"
                 onClick={() => {
-                  window.location.href = "/landing/restaurants";
+                  window.location.href = appPath("/restaurants");
                 }}
               >
                 <UtensilsCrossed className="size-5" />
@@ -95,7 +96,7 @@ export default function LandingPage() {
                 <ArrowRight className="size-4" />
               </LiquidButton>
               <a
-                href="/landing/login?app=shop"
+                href={appPath("/login?app=shop")}
                 className="inline-flex h-12 items-center gap-2 rounded-full border border-white/20 bg-white/5 px-6 text-sm font-semibold text-white transition hover:bg-white/10"
               >
                 Sign in
@@ -153,7 +154,7 @@ export default function LandingPage() {
         </div>
 
         <footer className="mt-10 flex flex-wrap items-center justify-center gap-6 text-xs text-white/45">
-          <a href="/landing/restaurants" className="hover:text-orange-300">
+          <a href={appPath("/restaurants")} className="hover:text-orange-300">
             Browse restaurants
           </a>
           <a href="/shop" className="hover:text-orange-300">

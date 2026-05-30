@@ -19,7 +19,9 @@ Open a PR to `main` on [RedaAwwad/Food-Delivery](https://github.com/RedaAwwad/Fo
    - **Publish:** `client/dist`
 3. **Environment variables** (Site settings → Environment variables):
    - `VITE_API_URL` = `https://YOUR-BACKEND-HOST/api/v1` (after you deploy the Node API)
-4. Deploy. Your site will be at `https://something.netlify.app/landing/`.
+4. Deploy. Your site will be at `https://something.netlify.app/` (root; `netlify.toml` sets `VITE_BASE_PATH=/`).
+
+If you see a **blank page**, redeploy after the latest fix: assets must load from `/assets/`, not `/landing/assets/`.
 
 Without `VITE_API_URL`, the landing UI loads but login and restaurant data need a running API.
 

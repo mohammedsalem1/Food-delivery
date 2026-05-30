@@ -1,9 +1,10 @@
 import { Bike, LayoutDashboard, ShoppingBag, BookOpen, LogIn, UtensilsCrossed } from "lucide-react";
+import { appPath } from "@/lib/base-path";
 
 const links = [
-  { href: "/landing/restaurants", label: "Restaurants", icon: UtensilsCrossed },
+  { href: appPath("/restaurants"), label: "Restaurants", icon: UtensilsCrossed },
   { href: "/shop", label: "Order food", icon: ShoppingBag },
-  { href: "/landing/login?app=shop", label: "Sign in", icon: LogIn },
+  { href: appPath("/login?app=shop"), label: "Sign in", icon: LogIn },
   { href: "/dashboard", label: "Restaurant OS", icon: LayoutDashboard },
   { href: "/api-docs", label: "API", icon: BookOpen },
 ];
@@ -12,7 +13,7 @@ export function SiteHeader() {
   return (
     <header className="fixed left-0 right-0 top-0 z-20 border-b border-white/10 bg-black/40 backdrop-blur-md">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
-        <a href="/landing" className="flex items-center gap-2.5 font-extrabold tracking-tight text-white">
+        <a href={appPath("/")} className="flex items-center gap-2.5 font-extrabold tracking-tight text-white">
           <span className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-orange-400 to-orange-600 shadow-lg shadow-orange-500/30">
             <Bike className="size-5 text-white" strokeWidth={2.5} />
           </span>

@@ -1,5 +1,6 @@
 import { TypewriterEffectSmooth } from "@/components/ui/typewriter-effect";
 import { Bike } from "lucide-react";
+import { appPath } from "@/lib/base-path";
 
 const HERO_IMG =
   "https://images.unsplash.com/photo-1504674900247-0877df9cc836?w=1200&q=80";
@@ -19,7 +20,7 @@ export function AuthPanel({ subtitle, words }: AuthPanelProps) {
         backgroundPosition: "center",
       }}
     >
-      <a href="/landing" className="flex items-center gap-2.5 font-extrabold tracking-tight">
+      <a href={appPath("/")} className="flex items-center gap-2.5 font-extrabold tracking-tight">
         <span className="flex size-10 items-center justify-center rounded-xl bg-gradient-to-br from-orange-400 to-orange-600">
           <Bike className="size-5" strokeWidth={2.5} />
         </span>

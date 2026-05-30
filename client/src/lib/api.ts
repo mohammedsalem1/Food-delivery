@@ -1,3 +1,4 @@
+import { appPath } from "@/lib/base-path";
 import { getApiBase } from "@/lib/env";
 
 const API = getApiBase();
@@ -76,7 +77,7 @@ export function goToRestaurantMenu(restaurantId: string) {
   sessionStorage.setItem("shop_return", hash);
   const token = localStorage.getItem("shop_token");
   if (!token || token === "demo-token") {
-    window.location.href = "/landing/login?app=shop";
+    window.location.href = appPath("/login?app=shop");
     return;
   }
   window.location.href = `/shop${hash}`;

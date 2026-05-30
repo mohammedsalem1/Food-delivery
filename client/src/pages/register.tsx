@@ -3,6 +3,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { Eye, EyeOff, Loader2, Mail, Lock, User, Phone } from "lucide-react";
 import { AuthPanel, REGISTER_WORDS } from "@/components/auth-panel";
 import { getAuthApp, register, redirectAfterAuth } from "@/lib/auth-api";
+import { appPath } from "@/lib/base-path";
 
 export default function RegisterPage() {
   const [params] = useSearchParams();
@@ -41,7 +42,7 @@ export default function RegisterPage() {
       <div className="flex flex-col justify-center bg-background px-6 py-12 sm:px-12">
         <div className="mx-auto w-full max-w-md">
           <a
-            href="/landing"
+            href={appPath("/")}
             className="mb-8 inline-flex items-center gap-2 text-sm font-bold text-orange-500 lg:hidden"
           >
             ← FOOD-DELIVERY

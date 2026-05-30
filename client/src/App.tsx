@@ -3,10 +3,11 @@ import LandingPage from "@/pages/landing";
 import LoginPage from "@/pages/login";
 import RegisterPage from "@/pages/register";
 import RestaurantsPage from "@/pages/restaurants";
+import { routerBase } from "@/lib/base-path";
 
 export default function App() {
   return (
-    <BrowserRouter basename="/landing">
+    <BrowserRouter basename={routerBase()}>
       <Routes>
         <Route path="/" element={<LandingPage />} />
         <Route path="/login" element={<LoginPage />} />
