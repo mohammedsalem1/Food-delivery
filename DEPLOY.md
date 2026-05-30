@@ -101,7 +101,8 @@ npm run dev
 
 | Problem | Fix |
 |---------|-----|
-| `Cannot find module .../generated/prisma/client` | Build must run `prisma generate`. Redeploy after pulling latest `Dockerfile` / `postinstall`. |
+| `Cannot find module .../generated/prisma/client` | Build must run `prisma generate`. Redeploy after pulling latest `Dockerfile`. |
+| `PrismaConfigEnvError: DATABASE_URL` during Docker build | Fixed: Dockerfile sets a build-time placeholder URL. Redeploy latest `paymentTest`. |
 | Log shows `npm run dev` / `tsx watch` | Render is using **Docker** with old CMD. **Settings → Runtime**: use **Node** + Start: `npx tsx src/server.ts`, or redeploy with fixed `Dockerfile`. |
 | CORS error on Netlify | Set `CLIENT_ORIGINS` on Render to exact Netlify URL, redeploy API |
 | Register fails 500 | Check Render logs; confirm `DATABASE_URL` and migrations ran |
