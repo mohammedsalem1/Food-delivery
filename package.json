@@ -13,6 +13,8 @@
     "seed": "tsx prisma/seed.ts",
     "client:dev": "npm run dev --prefix client",
     "client:build": "npm run build --prefix client",
+    "start:prod": "tsx src/server.ts",
+    "postdeploy:seed": "tsx prisma/seed.ts",
     "generate-jmeter": "tsx scripts/generate_jmeter_data.ts"
   },
   "repository": {

@@ -23,7 +23,22 @@ const initiateApp = async (app: Express) => {
 
   app.use(express.json());
   app.use(cookieParser());
-  app.use(cors());
+  const clientOrigins = (process.env.CLIENT_ORIGINS || "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  app.use(
+    cors({
+      origin(origin, callback) {
+        if (!origin || clientOrigins.length === 0 || clientOrigins.includes(origin)) {
+          callback(null, true);
+        } else {
+          callback(new Error(`CORS blocked: ${origin}`));
+        }
+      },
+      credentials: true,
+    })
+  );
   app.use(express.urlencoded({ extended: true }));
 
   // EJS view engine — only used by the /test/* dev harness pages
