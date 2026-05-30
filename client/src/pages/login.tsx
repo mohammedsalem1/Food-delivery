@@ -9,7 +9,7 @@ export default function LoginPage() {
   const [params] = useSearchParams();
   const app = getAuthApp(params);
   const [email, setEmail] = useState(app === "dashboard" ? "admin@admin.com" : "");
-  const [password, setPassword] = useState(app === "dashboard" ? "Pass@123" : "");
+  const [password, setPassword] = useState(app === "dashboard" ? "123456" : "");
   const [showPw, setShowPw] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
@@ -54,7 +54,7 @@ export default function LoginPage() {
           <p className="mt-2 text-sm text-muted-foreground">
             {app === "shop"
               ? "Order from your favorite restaurants"
-              : "Admin & managers — use admin@admin.com / Pass@123 for demo"}
+              : "Admin & managers — use admin@admin.com / 123456 for demo"}
           </p>
 
           <form onSubmit={onSubmit} className="mt-8 space-y-4">

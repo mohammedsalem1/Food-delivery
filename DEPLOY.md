@@ -38,7 +38,7 @@
    npm run seed:full       # huge seed: 1000 restaurants (local only, slow)
    ```
    **Accounts after seed:**
-   - Admin: `admin@admin.com` / `Pass@123`
+   - Admin: `admin@admin.com` / `123456`
    - Shop customer: `customer@demo.com` / `Pass@123`
 
    **Local setup (project root, not `client/`):**
@@ -97,7 +97,7 @@ After deploy, use the same Render URL for:
 | Landing (on server) | `https://YOUR-SERVICE.onrender.com/landing` |
 | API docs | `https://YOUR-SERVICE.onrender.com/api-docs` |
 
-Demo admin (if seeded): `admin@admin.com` / `Pass@123`
+Demo admin (if seeded): `admin@admin.com` / `123456`
 
 ---
 

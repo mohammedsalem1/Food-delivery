@@ -41,7 +41,7 @@ function field(id, label, type, ph, ic, action) {
 function loginForm() {
   return `
     <h1>Welcome back 👋</h1>
-    <p class="sub">Sign in with your admin account (seed: admin@admin.com / Pass@123)</p>
+    <p class="sub">Sign in with your admin account (seed: admin@admin.com / 123456)</p>
     <div class="social-row">
       <button class="social-btn">${gIcon()} Google</button>
       <button class="social-btn">${aIcon()} Apple</button>
@@ -114,6 +114,11 @@ export function renderAuth(root, mode, onAuthed) {
       toast(e.message || "Something went wrong", "error");
     } finally { btn.disabled = false; btn.textContent = orig; }
   });
+
+  if (mode === "login") {
+    const pw = $("#password");
+    if (pw) pw.value = "123456";
+  }
 
   root.querySelectorAll(".input").forEach(i => i.addEventListener("keydown", e => { if (e.key === "Enter") $("#submitBtn").click(); }));
 }

@@ -70,12 +70,15 @@ export async function runSeed() {
     }
   }
 
-  const hashedPwd = await PasswordUtils.hash("Pass@123");
+  const ADMIN_EMAIL = "admin@admin.com";
+  const ADMIN_PASSWORD = "123456";
+  const DEMO_PASSWORD = "Pass@123";
+  const hashedPwd = await PasswordUtils.hash(DEMO_PASSWORD);
+  const adminPassword = await PasswordUtils.hash(ADMIN_PASSWORD);
 
   // 1.2 Create Default Admin User
   console.log("Seeding Default Admin...");
-  const adminEmail = "admin@admin.com";
-  const adminPassword = hashedPwd;
+  const adminEmail = ADMIN_EMAIL;
 
   const existingAdmin = await prisma.user.findUnique({ where: { userEmail: adminEmail } });
   if (!existingAdmin) {
@@ -87,12 +90,16 @@ export async function runSeed() {
         isAdmin: true,
         isConfirmed: true,
         isActive: true,
-        roles: [DEFAULT_ROLE_KEYS.ADMIN], // JSONB Roles
+        roles: [DEFAULT_ROLE_KEYS.ADMIN],
       },
     });
-    console.log("Default Admin created.");
+    console.log(`Default Admin created (${ADMIN_EMAIL} / ${ADMIN_PASSWORD}).`);
   } else {
-    console.log("Default Admin already exists.");
+    await prisma.user.update({
+      where: { userEmail: adminEmail },
+      data: { userPassword: adminPassword, isAdmin: true, isActive: true, isConfirmed: true },
+    });
+    console.log(`Default Admin password set to ${ADMIN_PASSWORD}.`);
   }
 
   const demoCustomerEmail = "customer@demo.com";
@@ -336,7 +343,7 @@ export async function runSeed() {
   console.log(
     `Seeding complete! ${createdUserCustomers.length} customers, ${createdCarts.length} carts.`
   );
-  console.log("Login: admin@admin.com / Pass@123  |  customer@demo.com / Pass@123");
+  console.log(`Login: ${ADMIN_EMAIL} / ${ADMIN_PASSWORD}  |  customer@demo.com / ${DEMO_PASSWORD}`);
 }
 
 const isDirectRun = process.argv[1]?.replace(/\\/g, "/").includes("prisma/seed.ts");

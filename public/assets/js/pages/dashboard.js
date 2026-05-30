@@ -62,7 +62,7 @@ export async function renderDashboard(root) {
 
   const banner = live
     ? `<div class="card card-pad live-banner live-banner--ok"><div class="row"><span class="live-banner__icon">${icon("checkCircle")}</span><div><strong>Live data</strong><div class="muted" style="font-size:13px">${fmt.num(report.total ?? 0)} orders loaded from the database</div></div></div></div>`
-    : `<div class="card card-pad live-banner live-banner--warn"><div class="row"><span class="live-banner__icon">${icon("bell")}</span><div><strong>Demo data</strong><div class="muted" style="font-size:13px">${apiError ? apiError + " — " : ""}Sign in as <code>admin@admin.com</code> / <code>Pass@123</code> to load real database stats.</div></div></div></div>`;
+    : `<div class="card card-pad live-banner live-banner--warn"><div class="row"><span class="live-banner__icon">${icon("bell")}</span><div><strong>Demo data</strong><div class="muted" style="font-size:13px">${apiError ? apiError + " — " : ""}Sign in as <code>admin@admin.com</code> / <code>123456</code> to load real database stats.</div></div></div></div>`;
 
   root.innerHTML = `
     ${banner}
