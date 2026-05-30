@@ -23,6 +23,7 @@
 
    | Variable | Value |
    |----------|--------|
+   | `DATABASE_URL` | **Required.** Link the Render Postgres database (**Add from database**), or paste **Internal Database URL** — never use `localhost:5433` from your local `.env` |
    | `APP_BASE_URL` | `https://food-delivery-api.onrender.com` (your real Render URL) |
    | `CLIENT_ORIGINS` | `https://fooddelivery93.netlify.app` (your Netlify URL, no trailing slash) |
 
@@ -102,7 +103,9 @@ npm run dev
 | Problem | Fix |
 |---------|-----|
 | `Cannot find module .../generated/prisma/client` | Build must run `prisma generate`. Redeploy after pulling latest `Dockerfile`. |
-| `PrismaConfigEnvError: DATABASE_URL` during Docker build | Fixed: Dockerfile sets a build-time placeholder URL. Redeploy latest `paymentTest`. |
+| `PrismaConfigEnvError: DATABASE_URL` during Docker build | Fixed: Dockerfile uses build-time placeholder only. Redeploy latest `paymentTest`. |
+| `Can't reach database server at localhost:5433` | `DATABASE_URL` on Render is wrong (local `.env`). Link Postgres in Render → **Environment** → **Add from database**. |
+| OpenSSL / libssl warning | Fixed in Dockerfile (`apt-get install openssl`). |
 | Log shows `npm run dev` / `tsx watch` | Render is using **Docker** with old CMD. **Settings → Runtime**: use **Node** + Start: `npx tsx src/server.ts`, or redeploy with fixed `Dockerfile`. |
 | CORS error on Netlify | Set `CLIENT_ORIGINS` on Render to exact Netlify URL, redeploy API |
 | Register fails 500 | Check Render logs; confirm `DATABASE_URL` and migrations ran |

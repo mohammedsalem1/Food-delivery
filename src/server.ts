@@ -12,7 +12,9 @@ import { webhookRouter } from "./routes/webhook.routes";
 import { testRouter } from "./routes/test.routes";
 import { startStaleOrderJob } from "./jobs/staleOrder.job";
 
-dotenv.config();
+if (!process.env.DATABASE_URL) {
+  dotenv.config();
+}
 const app = express();
 
 const initiateApp = async (app: Express) => {
