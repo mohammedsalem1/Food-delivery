@@ -4,7 +4,16 @@ import { prisma } from "../src/config/prisma.config";
 import { DEFAULT_ROLE_KEYS } from "../src/utils/constants";
 import { PasswordUtils } from "../src/utils/password.utils";
 
-async function main() {
+/** demo = fast (Render/default) | full = 1000 restaurants + 10k customers (local only) */
+function seedScale() {
+  const profile = process.env.SEED_PROFILE || "demo";
+  if (profile === "full") {
+    return { restaurants: 1000, itemsPerRestaurant: 20, customers: 10000, seedCarts: true };
+  }
+  return { restaurants: 10, itemsPerRestaurant: 8, customers: 12, seedCarts: true };
+}
+
+export async function runSeed() {
   console.log("Cleaning up database...");
   // Ordered cleanup to avoid foreign key constraint violations
   await prisma.orderItem.deleteMany({});
@@ -23,7 +32,11 @@ async function main() {
   await prisma.role.deleteMany({});
   await prisma.orderStatus.deleteMany({});
 
-  console.log("Seeding started...");
+  const scale = seedScale();
+  console.log(`Seeding started (profile: ${process.env.SEED_PROFILE || "demo"})...`);
+  console.log(
+    `  → ${scale.restaurants} restaurants, ${scale.itemsPerRestaurant} items each, ${scale.customers} customers`
+  );
 
   // 1. Ensure Roles exist (Idempotent) - Still keeping Role table for definitions
   const roleKeys = [
@@ -57,10 +70,12 @@ async function main() {
     }
   }
 
+  const hashedPwd = await PasswordUtils.hash("Pass@123");
+
   // 1.2 Create Default Admin User
   console.log("Seeding Default Admin...");
   const adminEmail = "admin@admin.com";
-  const adminPassword = await PasswordUtils.hash("Pass@123");
+  const adminPassword = hashedPwd;
 
   const existingAdmin = await prisma.user.findUnique({ where: { userEmail: adminEmail } });
   if (!existingAdmin) {
@@ -80,16 +95,42 @@ async function main() {
     console.log("Default Admin already exists.");
   }
 
+  const demoCustomerEmail = "customer@demo.com";
+  const existingDemoCustomer = await prisma.user.findUnique({
+    where: { userEmail: demoCustomerEmail },
+  });
+  if (!existingDemoCustomer) {
+    const demoUser = await prisma.user.create({
+      data: {
+        userName: "Demo Customer",
+        userEmail: demoCustomerEmail,
+        userPassword: hashedPwd,
+        isConfirmed: true,
+        isActive: true,
+        roles: [DEFAULT_ROLE_KEYS.CUSTOMER],
+      },
+    });
+    await prisma.customer.create({
+      data: {
+        userId: demoUser.userId,
+        customerPhone: "+10000000001",
+        createdById: demoUser.userId,
+        updatedById: demoUser.userId,
+        addresses: [],
+      },
+    });
+    console.log("Demo customer: customer@demo.com / Pass@123");
+  }
+
   // Helper to chunk arrays
   const chunk = <T>(arr: T[], size: number): T[][] =>
     Array.from({ length: Math.ceil(arr.length / size) }, (_, i) =>
       arr.slice(i * size, i * size + size)
     );
 
-  // --- SEED RESTAURANTS (1000) ---
   console.log("Seeding Restaurants...");
-  const NUM_RESTAURANTS = 1000;
-  const MENU_ITEMS_PER_RESTAURANT = 20;
+  const NUM_RESTAURANTS = scale.restaurants;
+  const MENU_ITEMS_PER_RESTAURANT = scale.itemsPerRestaurant;
 
   // Create Managers first
   const restaurantManagersData = Array.from({ length: NUM_RESTAURANTS }).map(() => ({
@@ -101,9 +142,7 @@ async function main() {
     isConfirmed: true,
   }));
 
-  // Hash password once for performance
-  const hashedPwd = await PasswordUtils.hash("Pass@123");
-  restaurantManagersData.forEach(m => m.userPassword = hashedPwd);
+  restaurantManagersData.forEach((m) => (m.userPassword = hashedPwd));
 
   const createdManagers = await prisma.$transaction(async (tx) => {
     const batches = chunk(restaurantManagersData, 100).map((batch) =>
@@ -196,9 +235,8 @@ async function main() {
   console.log(`Created ${NUM_RESTAURANTS} restaurants and ~${NUM_RESTAURANTS * MENU_ITEMS_PER_RESTAURANT} items.`);
 
 
-  // --- SEED CUSTOMERS (10,000) ---
   console.log("Seeding Customers...");
-  const NUM_CUSTOMERS = 10000;
+  const NUM_CUSTOMERS = scale.customers;
 
   const costumersData = Array.from({ length: NUM_CUSTOMERS }).map(() => ({
     userName: faker.person.fullName(),
@@ -249,7 +287,11 @@ async function main() {
   }, { timeout: 60000 }).then(res => res.flat());
 
 
-  // --- SEED CARTS & CART ITEMS ---
+  if (!scale.seedCarts) {
+    console.log("Seeding complete (carts skipped).");
+    return;
+  }
+
   console.log("Seeding Carts...");
 
   // Fetch all menu items ids to pick randomly
@@ -291,15 +333,22 @@ async function main() {
     return Promise.all(batches);
   }, { timeout: 60000 });
 
-  console.log(`Seeding complete! Created ${createdUserCustomers.length} customers and ${createdCarts.length} carts.`);
+  console.log(
+    `Seeding complete! ${createdUserCustomers.length} customers, ${createdCarts.length} carts.`
+  );
+  console.log("Login: admin@admin.com / Pass@123  |  customer@demo.com / Pass@123");
 }
 
-main()
-  .then(async () => {
-    await prisma.$disconnect();
-  })
-  .catch(async (e) => {
-    console.error(e);
-    await prisma.$disconnect();
-    process.exit(1);
-  });
+const isDirectRun = process.argv[1]?.replace(/\\/g, "/").includes("prisma/seed.ts");
+
+if (isDirectRun) {
+  runSeed()
+    .then(async () => {
+      await prisma.$disconnect();
+    })
+    .catch(async (e) => {
+      console.error(e);
+      await prisma.$disconnect();
+      process.exit(1);
+    });
+}

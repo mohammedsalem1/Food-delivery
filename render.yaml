@@ -37,6 +37,8 @@ services:
         value: "10"
       - key: SEED_IF_EMPTY
         value: "true"
+      - key: SEED_PROFILE
+        value: demo
       - key: CLIENT_ORIGINS
         sync: false
       - key: STRIPE_SECRET_KEY

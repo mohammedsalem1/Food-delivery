@@ -31,12 +31,22 @@
 
 6. Wait for **first deploy** to finish (build runs migrations).
 7. **Seed database** — automatic on deploy if the DB has no users (`SEED_IF_EMPTY=true` in `render.yaml`).  
-   Or manually in **Shell**:
+   Or manually in **Shell** (from `/app`):
    ```bash
-   npm run seed          # full reseed (deletes existing data)
-   npm run seed:if-empty # only if no users yet
+   npm run seed:if-empty   # only if database is empty (recommended)
+   npm run seed            # demo seed: 10 restaurants (~1 min)
+   npm run seed:full       # huge seed: 1000 restaurants (local only, slow)
    ```
-   Default admin: `admin@admin.com` / `Pass@123`
+   **Accounts after seed:**
+   - Admin: `admin@admin.com` / `Pass@123`
+   - Shop customer: `customer@demo.com` / `Pass@123`
+
+   **Local setup (project root, not `client/`):**
+   ```powershell
+   cd d:\Mentorship-NodeJS\Projects\Food-Delivery
+   $env:DATABASE_URL="postgresql://..."   # Render External URL
+   npm run db:setup
+   ```
 
 8. Test API: open  
    `https://YOUR-SERVICE.onrender.com/api/v1/public/health`  
