@@ -22,9 +22,10 @@ npx prisma generate
 echo "Running migrations..."
 npx prisma migrate deploy
 
-if [ "${SEED_IF_EMPTY:-true}" = "true" ]; then
+# Seed on Render often times out — run locally: npm run seed:admin or .\scripts\seed-local.ps1
+if [ "${SEED_IF_EMPTY:-false}" = "true" ]; then
   echo "Database seed (if empty)..."
-  npm run seed:if-empty
+  npm run seed:if-empty || echo "WARN: seed skipped (run locally: npm run seed:admin)"
 fi
 
 echo "Starting API..."

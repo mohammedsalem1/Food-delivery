@@ -12,6 +12,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "seed": "tsx prisma/seed.ts",
     "seed:full": "tsx scripts/seed-full.ts",
+    "seed:admin": "tsx scripts/seed-admin-only.ts",
     "seed:if-empty": "tsx scripts/seed-if-empty.ts",
     "db:setup": "prisma migrate deploy && npm run seed:if-empty",
     "prisma:generate": "prisma generate",

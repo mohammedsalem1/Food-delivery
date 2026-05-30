@@ -36,7 +36,7 @@ services:
       - key: SALT_ROUNDS
         value: "10"
       - key: SEED_IF_EMPTY
-        value: "true"
+        value: "false"
       - key: SEED_PROFILE
         value: demo
       - key: CLIENT_ORIGINS

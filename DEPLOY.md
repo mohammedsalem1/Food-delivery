@@ -41,12 +41,33 @@
    - Admin: `admin@admin.com` / `123456`
    - Shop customer: `customer@demo.com` / `Pass@123`
 
-   **Local setup (project root, not `client/`):**
+   **Seed from your PC (Render Shell not required):**
+
+   1. Render → **Postgres** → **Connections** → copy **External Database URL**  
+      (not Internal — External works from your computer)
+
+   2. PowerShell — project root (`Food-Delivery`, not `client/`):
+
    ```powershell
    cd d:\Mentorship-NodeJS\Projects\Food-Delivery
-   $env:DATABASE_URL="postgresql://..."   # Render External URL
-   npm run db:setup
+
+   # Paste your External URL (one line)
+   $env:DATABASE_URL="postgresql://USER:PASS@dpg-xxxx.REGION.postgres.render.com/fooddelivery_r7sk"
+
+   # Option A — admin only (fast, does NOT wipe data)
+   npx prisma migrate deploy
+   npm run seed:admin
+
+   # Option B — full demo data (10 restaurants, wipes existing data)
+   npx prisma migrate deploy
+   npm run seed
+
+   # Or use the helper script:
+   .\scripts\seed-local.ps1 -Mode admin
+   .\scripts\seed-local.ps1 -Mode demo
    ```
+
+   3. If `prisma generate` fails locally, run once: `npm run prisma:generate`
 
 8. Test API: open  
    `https://YOUR-SERVICE.onrender.com/api/v1/public/health`  
