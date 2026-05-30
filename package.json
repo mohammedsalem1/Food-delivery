@@ -11,6 +11,7 @@
     "swagger": "tsx ./src/lib/swagger/swagger.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "seed": "tsx prisma/seed.ts",
+    "postinstall": "prisma generate",
     "client:dev": "npm run dev --prefix client",
     "client:build": "npm run build --prefix client",
     "start:prod": "tsx src/server.ts",

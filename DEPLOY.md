@@ -101,10 +101,19 @@ npm run dev
 
 | Problem | Fix |
 |---------|-----|
+| `Cannot find module .../generated/prisma/client` | Build must run `prisma generate`. Redeploy after pulling latest `Dockerfile` / `postinstall`. |
+| Log shows `npm run dev` / `tsx watch` | Render is using **Docker** with old CMD. **Settings → Runtime**: use **Node** + Start: `npx tsx src/server.ts`, or redeploy with fixed `Dockerfile`. |
 | CORS error on Netlify | Set `CLIENT_ORIGINS` on Render to exact Netlify URL, redeploy API |
 | Register fails 500 | Check Render logs; confirm `DATABASE_URL` and migrations ran |
 | Slow first request | Render free tier sleeps; wake with health URL |
 | Empty Netlify page | Redeploy Netlify; open `/` not `/landing/` |
 | `VITE_API_URL` ignored | Redeploy Netlify **after** saving the variable |
+
+### Render: Docker vs Node
+
+If deploy logs mention **Docker** / **registry**:
+
+1. **Option A** — Keep Docker: push latest repo (fixed `Dockerfile` runs `prisma generate` + `tsx src/server.ts`).
+2. **Option B** — Switch to Node: **Settings** → set **Runtime** to **Node** (not Docker), **Build command** and **Start command** from `render.yaml`, clear Dockerfile path if shown.
 
 Never commit `.env` to GitHub.
