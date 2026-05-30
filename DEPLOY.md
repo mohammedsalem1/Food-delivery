@@ -30,10 +30,13 @@
    Add Stripe keys if you use payments.
 
 6. Wait for **first deploy** to finish (build runs migrations).
-7. **Seed database** (once): Render → service → **Shell**:
+7. **Seed database** — automatic on deploy if the DB has no users (`SEED_IF_EMPTY=true` in `render.yaml`).  
+   Or manually in **Shell**:
    ```bash
-   npm run postdeploy:seed
+   npm run seed          # full reseed (deletes existing data)
+   npm run seed:if-empty # only if no users yet
    ```
+   Default admin: `admin@admin.com` / `Pass@123`
 
 8. Test API: open  
    `https://YOUR-SERVICE.onrender.com/api/v1/public/health`  
